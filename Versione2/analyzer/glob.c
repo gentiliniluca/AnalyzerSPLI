@@ -5,6 +5,8 @@ int olen=0;
 int filt_kill;
 int unknown;
 int decoded;
+int p_ftp=0;
+int r_ftp=0;
 int p_http=0;
 int r_http=0;
 int p_liv2=0;

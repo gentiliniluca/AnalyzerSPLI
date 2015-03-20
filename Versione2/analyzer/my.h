@@ -51,6 +51,8 @@ struct filt_udp {
 
 
 extern char outbuf[];
+extern int p_ftp;
+extern int r_ftp;
 extern int p_http;
 extern int r_http;
 extern int olen;

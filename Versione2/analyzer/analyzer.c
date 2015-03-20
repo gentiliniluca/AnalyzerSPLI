@@ -224,6 +224,14 @@ void main(int argc,char **argv){
             if(strcmp(buffer,"end_http")==0)break;
         }
     }
+	if (strcmp(buffer,"ftp")==0){
+        for(;;){
+            fscanf(fp, "%s", buffer);
+            if (strcmp(buffer, "run")==0) r_ftp=1;
+            if (strcmp(buffer, "print")==0) p_ftp=1;
+            if(strcmp(buffer,"end_ftp")==0)break;
+        }
+    }
   }
  
   mem=fopen("log.txt","wt");

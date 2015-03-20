@@ -1,0 +1,6 @@
+PORT 10,10,10,119,128,111
+200 PORT command successful. Consider using PASV.
+LIST
+150 Here comes the directory listing.
+-rw-r--r--    1 1000     1000       172962 Mar 18 11:03 tables_traverse.jpg
+226 Directory send OK.

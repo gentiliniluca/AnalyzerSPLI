@@ -69,7 +69,7 @@ int control_header_req(char *buf){
         return 1;
     if (strcmp(buf,"CONNECT")==0)
         return 1;
-    else return 0;
+    else return 1;
 }
 /*
 int control_header_res(char *buf){
@@ -88,7 +88,7 @@ int control_header_res(char *buf){
         return 1;
     if (strcmp(buf, "HTTP/1.1")==0)
         return 1;
-    else return 0;
+    else return 1;
 }
 
 
@@ -130,7 +130,7 @@ int analyze(char *buf){
     if (strcasecmp(buf, "Date")==0)
         return 1;
     else
-        return 0;
+        return 1;
 }
 
 void remove_spaces(char* source)
