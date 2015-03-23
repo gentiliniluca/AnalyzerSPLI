@@ -1,8 +1,0 @@
-inserire nella cartella /usr/local/lib la libreria (cartella) libpcap-1.7.2
-
-usare eventualmente il comando: sudo apt-get install libpcap0.8 libpcap0.8-dev libpcap-dev
-
-
-eseguire nella cartella principale del programma il comando make e dopo eseguire ./analyzer in sudo
-
-

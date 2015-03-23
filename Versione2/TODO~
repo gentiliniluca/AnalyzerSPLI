@@ -1,7 +1,0 @@
-Giuseppe 19.07 - L'analisi del codice è stata fatta in maniera (credo) abbastanza approfondita, ho cercato di commentare il più possibile ed ho messo dove potevo quanti più riferimenti potevo. Nella cartella progetto_spli/reference ci sono tutti gli rfc di cui avremo bisogno
-
-Da fare:
-implementare gestione file di configurazione per l'http
-studiare rfc http
-implementare la divisione del pacchetto
-implementare la visualizzazione del pacchetto (stamparla sul terminale o GUI)
