@@ -29,10 +29,12 @@ void liv7(u_int len,const u_char *p, u_int ssap, u_int dsap) {
 	    			flag_ftp_req = 1;
 	    		}
 	    		if (ssap == 20) {
+	    			colore(2);
 	    			myprintf("FTP | Data\n\n");
 	    			flag_ftp_dat = 1;
 	    		}
 	    		if(dsap == 20){
+	    			colore(2);
 	    			myprintf("FTP | Data\n\n");
 	    			flag_ftp_dat = 1;
 	    		}
@@ -60,10 +62,11 @@ void liv7(u_int len,const u_char *p, u_int ssap, u_int dsap) {
 				
 				p++;
 		  	}
-		  	if(flag_ftp_raw) {
-		  		myprintf("\n");
-		  	}
 		  	myprintf("\n");
+		  	if(flag_ftp_dat) {
+		  		myprintf("\n");
+		  		colore(6);
+		  	}
 		  	fflush(mem);
 		  	decoded = 1;
 	  	}
