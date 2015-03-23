@@ -7,7 +7,7 @@
 #include <stdarg.h>
 
 
-void liv7(u_int,const u_char *);
+void liv7(u_int,const u_char *, u_int ssap, u_int dsap);
 void liv4(u_int,u_int,const u_char *);
 void liv3(u_int,const u_char *);
 void liv2(u_char *,const struct pcap_pkthdr *,const u_char *);
@@ -17,6 +17,8 @@ void myprintf(const char *, ...);
 void print_ipv4(const u_char *);
 void print_ipv6(const u_char *);
 void print_liv2(const u_char *);
+int control_header_req(char *);
+int analyze(char *);
 
 
 struct filt_ipv4 {
@@ -49,6 +51,10 @@ struct filt_udp {
 
 
 extern char outbuf[];
+extern int p_ftp;
+extern int r_ftp;
+extern int p_http;
+extern int r_http;
 extern int olen;
 extern int p_liv2;
 extern int p_ipv4;

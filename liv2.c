@@ -5,11 +5,12 @@ void liv2(u_char *user,const struct pcap_pkthdr *h,const u_char *p){
   const u_char *mp;
   u_int len,type;
   char tratt[]="####################";
-  
+  // const u_char *p è un puntatore che punta all'inizio dell'header
   unknown=0;
   filt_kill=0;
   decoded=0;
   olen=0;
+  // type indica il tipo 
   type=ntohs(*(u_int *)(p+12));
   len=h->len;
   if(p_liv2){
@@ -21,7 +22,11 @@ void liv2(u_char *user,const struct pcap_pkthdr *h,const u_char *p){
     myprintf(" Type:%04x Len:%d",type,len);
     myprintf("\n");
   }
-  liv3(type,p+14);
+  /* nel protocollo liv 2 partendo dall'header, senza contare il preambolo e SFD,
+   * i dati iniziano dopo il MAC destinatario = 6 byte, il MAC sorgente= 6 byte
+   * e l'Ethertype = 2 byte. Totale dopo 6+6+2 = 14 byte
+   * */
+  liv3(type,p+14); // estrapolo i dati incapsulati e li passo alla funzione del livello 3
   if(olen!=0){
     o_colore(1);
     if(p_decoded&&decoded)printf("%s Decoded %s\n%s",tratt,tratt,outbuf);

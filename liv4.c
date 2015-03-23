@@ -2,26 +2,37 @@
 
 void liv4(u_int type,u_int len,const u_char *p){
   int ihl,flag,i;
+  /* La porta destinatario dsap e la porta sorgente ssap saranno parametri
+   * da passare al livello 7 per poter determinare il protocollo utilizzato
+   * (noi visto che analizziamo http una delle 2 porte dovrà avere valore 80)
+   */
   u_int dsap,ssap;
   u_long seq_num,ack_num;
   struct filt_tcp *aux_tcp;
   struct filt_udp *aux_udp;
   u_int urg;
   const u_char *mp;
-  u_char ff; 
-  
+  u_char ff;
+  /* Nel parametro proto è contenuto il numero che identifica il
+   * protocollo di liv. 4 vedi Assigned IP numbers
+   * su ftp://ftp.ripe.net/rfc/rfc790.txt pag. 5
+   * oppure su  http://en.wikipedia.org/wiki/List_of_IP_protocol_numbers
+   */
+  // TCP
   switch(type){
   case 6:
-    if(!r_tcp)return;  
+    if(!r_tcp)return;
+    // source port 2 bytes
     ssap=ntohs(*(u_int *)p);
+    // destination port 2 bytes
     dsap=ntohs(*(u_int *)(p+2));
     flag=0;
     for(aux_tcp=filt_tcp;aux_tcp!=NULL;aux_tcp=aux_tcp->next){
-      if(aux_tcp->ssap!=ssap&&aux_tcp->ssap!=0){
+      if(aux_tcp->ssap!=ssap && aux_tcp->ssap!=0){
 	flag=1;
 	continue;
       }
-      if(aux_tcp->dsap!=dsap&&aux_tcp->dsap!=0){
+      if(aux_tcp->dsap!=dsap && aux_tcp->dsap!=0){
 	flag=1;
 	continue;
       }
@@ -31,7 +42,10 @@ void liv4(u_int type,u_int len,const u_char *p){
     seq_num=ntohl(*(u_long *)(p+4));
     ack_num=ntohl(*(u_long *)(p+8));
     urg=ntohl(*(u_int *)(p+18));
-    ihl=((*(p+12))&0xf0)/4;
+    ihl=((*(p+12))&0xf0)/4; /* perché /4 e non * 4? perché i bit sono nella
+     parte più significativa del byte altrimenti dovrei fare
+    ihl = (((*(p+12))&0xf0)/8 )*4;
+    */
     ff=*(p+13);
     if(p_tcp){
       colore(4);
@@ -51,9 +65,9 @@ void liv4(u_int type,u_int len,const u_char *p){
       filt_kill=1;
       return;
     }
-    liv7(len-ihl,p+ihl);
+    liv7(len-ihl,p+ihl, ssap, dsap);
     return;
-    
+  // UDP  
   case 17:
     if(!r_udp)return;  
     ssap=ntohs(*(u_int *)p);
@@ -81,9 +95,9 @@ void liv4(u_int type,u_int len,const u_char *p){
       filt_kill=1;
       return;
     }
-    liv7(len-8,p+8);
+    liv7(len-8,p+8, ssap, dsap);
     return;
-
+// IGMP
   case 2:
     if(!p_igmp)return;  
     colore(4);
@@ -125,7 +139,7 @@ void liv4(u_int type,u_int len,const u_char *p){
     myprintf("\n");
     decoded=1;
     return;
-
+// ICMP
   case 1:
     if(!p_icmp)return;  
     colore(4);

@@ -5,7 +5,10 @@ int olen=0;
 int filt_kill;
 int unknown;
 int decoded;
-
+int p_ftp=0;
+int r_ftp=0;
+int p_http=0;
+int r_http=0;
 int p_liv2=0;
 int p_ipv4=0;
 int r_ipv4=0;
@@ -22,6 +25,8 @@ struct filt_tcp *filt_tcp=0;
 int p_arp=0;
 int p_igmp=0;
 int p_icmp=0;
+
+int p_http_body=0;
 int p_filt_kill=0;
 int p_unknown=0;
 int p_decoded=0;

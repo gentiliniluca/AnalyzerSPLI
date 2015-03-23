@@ -51,3 +51,97 @@ void print_ipv6(const u_char *p){
     myprintf(":");
   }
 }
+
+int control_header_req(char *buf){
+    if (strcmp(buf,"OPTIONS")==0)
+        return 1;
+    if (strcmp(buf,"GET")==0)
+        return 1;
+    if (strcmp(buf,"HEAD")==0)
+        return 1;
+    if (strcmp(buf,"POST")==0)
+        return 1;
+    if (strcmp(buf,"PUT")==0)
+        return 1;
+    if (strcmp(buf,"DELETE")==0)
+        return 1;
+    if (strcmp(buf,"TRACE")==0)
+        return 1;
+    if (strcmp(buf,"CONNECT")==0)
+        return 1;
+    else return 1;
+}
+/*
+int control_header_res(char *buf){
+    char *prot = (char *) malloc (5*sizeof(char));
+    strncpy(prot, buf, 4);
+    prot[5] = '\0';
+    if (strcmp(prot, "HTTP")==0) return 1;
+    else return 0;
+          
+}
+*/ 
+
+int control_header_res(char *buf){
+    //remove_spaces(buf);
+    if (strcmp(buf, "HTTP/1.0")==0)
+        return 1;
+    if (strcmp(buf, "HTTP/1.1")==0)
+        return 1;
+    else return 1;
+}
+
+
+int analyze(char *buf){
+    if (strcasecmp(buf, "Accept-Charset")==0)
+        return 1;
+    if (strcasecmp(buf, "Accept-Encoding")==0)
+        return 1;
+    if (strcasecmp(buf, "Accept-Language")==0)
+        return 1;
+    if (strcasecmp(buf, "From")==0)
+        return 1;
+    if (strcasecmp(buf, "Host")==0)
+        return 1;
+    if (strcasecmp(buf, "If-Modified-Since")==0)
+        return 1;
+    if (strcasecmp(buf, "If-Unmodified-Since")==0)
+        return 1;
+    if (strcasecmp(buf, "User-Agent")==0)
+        return 1;
+    if (strcasecmp(buf, "Content-Type")==0)
+        return 1;
+    if (strcasecmp(buf, "Content-Length")==0)
+        return 1;
+    if (strcasecmp(buf, "Last-Modified")==0)
+        return 1;
+    if (strcasecmp(buf, "Expires")==0)
+        return 1;
+    if (strcasecmp(buf, "Age")==0)
+        return 1;
+    if (strcasecmp(buf, "Location")==0)
+        return 1;
+    if (strcasecmp(buf, "Retry-After")==0)
+        return 1;
+    if (strcasecmp(buf, "Server")==0)
+        return 1;
+    if (strcasecmp(buf, "Connection")==0)
+        return 1;
+    if (strcasecmp(buf, "Date")==0)
+        return 1;
+    else
+        return 1;
+}
+
+void remove_spaces(char* source)
+{
+  char* i = source;
+  char* j = source;
+  while(*j != 0)
+  {
+    *i = *j++;
+    if(*i != ' ')
+      i++;
+  }
+  *i = 0;
+}

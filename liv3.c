@@ -20,6 +20,10 @@ void liv3(u_int type,const u_char *p){
       i=aux_ipv4->scid;
       j=i/8;
       r=i%8;
+      /* il puntatore *p punta all'inizio del pacchetto. 
+       * Dopo 12 byte inizia il source address
+       * riferimento: http://www.ietf.org/rfc/rfc791.txt pag. 10
+       */
       mp=p+12;
       for(k=0;k<j;k++)if(*(mp+k)!=aux_ipv4->sip[k])break;
       if(k!=j||((*(mp+j))&mask[r])!=(aux_ipv4->sip[j]&mask[r])){
@@ -40,8 +44,15 @@ void liv3(u_int type,const u_char *p){
     }
     id=ntohs(*(u_int *)(p+4));
     ttl=*(p+8);
+    /* Nella variabile proto è contenuto il numero che identifica il
+     * protocollo di liv. 4 vedi (RFC 791)
+     * su http://www.ietf.org/rfc/rfc791.txt pag. 13
+   */
     proto=*(p+9);
     len=ntohs(*(u_int *)(p+2));
+    /* IHL indica la lunghezza dell'header, viene moltiplicato per 4 perché
+     * viene indicata la lunghezza il word di 32 bit
+     */
     ihl=((*p)&0x0f)*4;
     fragm=ntohs(*(u_int *)(p+6));
     if(p_ipv4){

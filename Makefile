@@ -1,10 +1,10 @@
-CC          = gcc
+CC          = gcc -g
 CLINKER     = $(CC)
 
 all: analyzer
 
 analyzer: analyzer.o liv2.o liv3.o liv4.o liv7.o util.o glob.o
-	$(CLINKER) -o analyzer analyzer.o liv2.o liv3.o liv4.o liv7.o util.o glob.o /usr/lib/x86_64-linux-gnu/libpcap.so	
+	$(CLINKER) -o analyzer analyzer.o liv2.o liv3.o liv4.o liv7.o util.o glob.o -L /usr/lib/x86_64-linux-gnu -lpcap	
 
 
 clean:

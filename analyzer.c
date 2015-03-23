@@ -1,10 +1,11 @@
 #include "my.h"
-
+#include "glob.h"
 #define LENSNIF 1500
 
 void main(int argc,char **argv){
   char buffer[200],*aux;
   pcap_t *pd;
+  u_char *dati;
   struct bpf_program fcode;
   struct filt_ipv4 *aux_ipv4,*aux1_ipv4;
   struct filt_ipv6 *aux_ipv6,*aux1_ipv6;
@@ -14,18 +15,28 @@ void main(int argc,char **argv){
   u_int aux_ui;
   FILE *fp;
 
+//controllo argomenti, in ingresso prende un file di configurazione
   if(argc!=2){
     fprintf(stderr,"Use %s config_file\n",argv[0]);
     exit(1);
   }
+  //printf ("%s %s", argv[0], argv[1]);
   fp=fopen(argv[1],"rt");
   if(fp==NULL)exit(1);
+
+  // lettura del file di configurazione
   for(;;){
     fscanf(fp,"%s",buffer);
+    // se legge "end" interrompe il ciclo
     if(strcmp(buffer,"end")==0)break;
     if(strcmp(buffer,"device")==0){
-      fscanf(fp,"%s",device);
+      // inserisce nella variabile device il tipo di dispositivo
+	fscanf(fp,"%s",device);
     }
+    /* assegnamento delle variabili
+     * ad esempio se si vuole stampare il pacchetto arp
+     * la variabile p_arp è a 1
+     */
     if(strcmp(buffer,"print")==0){
       for(;;){
 	fscanf(fp,"%s",buffer);
@@ -75,11 +86,22 @@ void main(int argc,char **argv){
 	  aux_ipv4=(struct filt_ipv4 *)malloc(sizeof(struct filt_ipv4));
 	  if(aux_ipv4==NULL)exit(1);
 	  if(aux1_ipv4==NULL)filt_ipv4=aux_ipv4;
+          // struttura lista con aggiunta in coda
 	  else aux1_ipv4->next=aux_ipv4;
 	  fscanf(fp,"%s",buffer);
+          // aux è la stringa che rappresenta un byte dell'indirizzo ip
 	  aux=strtok(buffer,".");
 	  aux_ipv4->sip[0]=atoi(aux);
 	  for(i=1;i<4;i++){
+              /*
+               The strtok() function returns a pointer to the next "token" 
+               * in str1, where str2 contains the delimiters that determine 
+               * the token. strtok() returns NULL if no token is found. 
+               * In order to convert a string to tokens, 
+               * the first call to strtok() should have str1 point 
+               * to the string to be tokenized. 
+               * All calls after this should have str1 be NULL. 
+               */
 	    aux=strtok(NULL,".");
 	    aux_ipv4->sip[i]=atoi(aux);
 	  }
@@ -99,6 +121,8 @@ void main(int argc,char **argv){
 	if(strcmp(buffer,"end_ipv4")==0)break;
       }
     }
+    
+    // configurazione per ipv6
     if(strcmp(buffer,"ipv6")==0){
       for(;;){
 	fscanf(fp,"%s",buffer);
@@ -143,6 +167,8 @@ void main(int argc,char **argv){
 	if(strcmp(buffer,"end_ipv6")==0)break;
       }
     }
+    
+    // configurazione per liv. 4 TCP
     if(strcmp(buffer,"tcp")==0){
       for(;;){
 	fscanf(fp,"%s",buffer);
@@ -165,6 +191,8 @@ void main(int argc,char **argv){
 	if(strcmp(buffer,"end_tcp")==0)break;
       }
     }
+    
+    // configurazione liv. 4 UDP
     if(strcmp(buffer,"udp")==0){
       for(;;){
 	fscanf(fp,"%s",buffer);
@@ -187,10 +215,29 @@ void main(int argc,char **argv){
 	if(strcmp(buffer,"end_udp")==0)break;
       }
     }
+    if (strcmp(buffer,"http")==0){
+        for(;;){
+            fscanf(fp, "%s", buffer);
+            if (strcmp(buffer, "run")==0) r_http=1;
+            if (strcmp(buffer, "print")==0) p_http=1;
+            //if (strcmp(buffer, "body")==0) p_http_body=1;
+            if(strcmp(buffer,"end_http")==0)break;
+        }
+    }
+	if (strcmp(buffer,"ftp")==0){
+        for(;;){
+            fscanf(fp, "%s", buffer);
+            if (strcmp(buffer, "run")==0) r_ftp=1;
+            if (strcmp(buffer, "print")==0) p_ftp=1;
+            if(strcmp(buffer,"end_ftp")==0)break;
+        }
+    }
   }
  
-  mem=fopen("log","wt");
+  mem=fopen("log.txt","wt");
   pd=pcap_open_live(device,LENSNIF,0,1000,buffer);
-  if(pd==NULL)exit(1);
+  if(pd==NULL){
+      printf("%s", buffer);
+      exit(1);}
   pcap_loop(pd,-1,liv2,dati);	
 }
