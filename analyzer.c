@@ -239,5 +239,8 @@ void main(int argc,char **argv){
   if(pd==NULL){
       printf("%s", buffer);
       exit(1);}
+
+  printf("Running...\n\n");
+
   pcap_loop(pd,-1,liv2,dati);	
 }

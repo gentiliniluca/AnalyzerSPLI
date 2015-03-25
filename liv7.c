@@ -19,23 +19,23 @@ void liv7(u_int len,const u_char *p, u_int ssap, u_int dsap) {
 			return;
 		}
 		
-	    	if(p_ftp) {	
+	    	if(p_ftp) {
 	    		if (ssap == 21) {
-	    			myprintf("FTP | Response\n    | ");
+	    			myprintf("FTP | Response\t\tPorts: %d -> %d\n    | ", ssap, dsap);
 	    			flag_ftp_res = 1;
 	    		}
 	    		if(dsap == 21){
-	    			myprintf("FTP | Request\n    | ");
+	    			myprintf("FTP | Request\t\tPorts: %d -> %d\n    | ", ssap, dsap);
 	    			flag_ftp_req = 1;
 	    		}
 	    		if (ssap == 20) {
 	    			colore(2);
-	    			myprintf("FTP | Data\n\n");
+	    			myprintf("FTP | Data\t\tPorts: %d -> %d\n\n", ssap, dsap);
 	    			flag_ftp_dat = 1;
 	    		}
 	    		if(dsap == 20){
 	    			colore(2);
-	    			myprintf("FTP | Data\n\n");
+	    			myprintf("FTP | Data\t\tPorts: %d -> %d\n\n", ssap, dsap);
 	    			flag_ftp_dat = 1;
 	    		}
     		
